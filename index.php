@@ -2,14 +2,13 @@
 require_once 'functions.php';  
 require_once 'connect.php';  
 if(!empty($_POST["submit"])){
-  add_msg();
   add_user();
+  add_msg();
   header("Location: {$_SERVER['PHP_SELF']}");
   exit;
 }
-$messages = get_data();
+var_dump($messages = get_data());
 ?> 
-
 <!DOCTYPE html>
 <html lang = "en";>
 <head>
