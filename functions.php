@@ -40,7 +40,7 @@ function create_tmessages(){
     id serial NOT NULL,
     text character varying(144) NOT NULL,
     user_id integer NOT NULL,
-    date date NOT NULL,
+    date time(10) NOT NULL,
     PRIMARY KEY (id)
 )
 WITH (
@@ -60,7 +60,7 @@ function create_tusers(){
 (
     id serial NOT NULL,
     name character varying(100) NOT NULL,
-    registration_date date NOT NULL,
+    registration_date time(10) NOT NULL,
     PRIMARY KEY (id)
 )
 WITH (
@@ -75,9 +75,7 @@ ALTER TABLE public.users
 function add_msg(){
   global $db;
   $user_id = get_user_id($_POST['username']);
-  $date = date('Y-M-d H:m-s');
-  $timezone = date_default_timezone_get();
-  date_default_timezone_set($timezone);
+  $date = date('H:i');
   $msg = pg_escape_string($db, $_POST['msg']);
   $query = "INSERT INTO messages (text, user_id, date) VALUES('$msg','$user_id','$date')";
   pg_query($db, $query);
@@ -87,13 +85,12 @@ function add_user(){
   global $db;
   $name = pg_escape_string($db, $_POST['username']);
   if (user_exist($name) == false){
-    $date = date('Y-M-d H:m-s');
-    $timezone = date_default_timezone_get();
-    date_default_timezone_set($timezone);
+    $date = date('H:i');
     $query = "INSERT INTO users (name, registration_date) VALUES('$name','$date')";
     pg_query($db, $query);
   }
 }
+
 
 function get_data(){
   global $db; 
@@ -108,4 +105,8 @@ function get_data(){
   $query = "SELECT text, name, date FROM messages LEFT JOIN users ON (messages.user_id = users.id)";
   $res = pg_query($db, $query);
   return pg_fetch_all($res);
+}
+
+function print_message(){
+
 }
