@@ -23,14 +23,9 @@ $messages = get_data();
         <div style="clear:both"></div>
     </div>
     <div id="chatbox">
-      <?php if(!empty($messages)): ?>
-        <?php foreach($messages as $message): ?> 
-          <div id="message">
-            <p>Автор: <?= $message['name'] ?> | Дата:<?= $message['date'] ?></p>
-            <div><?= nl2br(htmlspecialchars($message['text'])); ?></div>
-          </div>
-        <?php endforeach; ?>
-      <?php endif; ?>
+    <?php 
+      print_data($messages);
+    ?>
     </div>
     <form method="post" name="message" action="">
         <input name="username" type="text" id="username" size="63" /></br>

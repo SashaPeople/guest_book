@@ -107,6 +107,10 @@ function get_data(){
   return pg_fetch_all($res);
 }
 
-function print_message(){
-
+function print_data($messages){
+  if(!empty($messages)){
+    foreach($messages as $message){
+      include 'message.php';
+    }
+  }
 }
