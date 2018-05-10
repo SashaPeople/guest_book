@@ -7,7 +7,7 @@ if(!empty($_POST["submit"])){
   header("Location: {$_SERVER['PHP_SELF']}");
   exit;
 }
-var_dump($messages = get_data());
+$messages = get_data();
 ?> 
 <!DOCTYPE html>
 <html lang = "en";>
