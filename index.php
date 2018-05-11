@@ -7,7 +7,12 @@ if(!empty($_POST["submit"])){
   header("Location: {$_SERVER['PHP_SELF']}");
   exit;
 }
-$messages = get_data();
+if(empty($_POST["submit_filter"])){
+  $messages = get_data();
+}else{
+  $messages = filtration();
+}
+
 ?> 
 <!DOCTYPE html>
 <html lang = "en";>
@@ -18,19 +23,30 @@ $messages = get_data();
 </head>
 <body>
 <div id="wrapper">
+  <div id="filter">
+    <form method="post" name="filtration" action="">
+      <p>Выберите дату:<p></br> 
+      <div id="from">
+        <input type="date" name="form" id="form">
+      </div>
+      <div id="to">
+        <input type="date" name="to">
+      </div>
+      <button type="submit" name="submit_filter" value="test">submit</button>
+    </form>
+  </div>
   <div id="menu">
-        <h3>Welcome to guest book</h3>
-        <div style="clear:both"></div>
-    </div>
-    <div id="chatbox">
+    <h3>Welcome to guest book</h3>
+  </div>
+  <div id="chatbox">
     <?php 
       print_data($messages);
     ?>
-    </div>
+  </div>
     <form method="post" name="message" action="">
-        <input name="username" type="text" id="username" size="63" /></br>
-        <textarea name="msg" id="msg"></textarea></br>
-        <button type="submit" name="submit" value="test">submmit </button>
+      <input name="username" type="text" id="username" size="63" /></br>
+      <textarea name="msg" id="msg"></textarea></br>
+      <button type="submit" name="submit" value="test">submit</button>
     </form>
 </div>
 </body>

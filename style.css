@@ -14,6 +14,19 @@ form, p, span {
     background:#EBF4FB;
     width:504px;
     border:1px solid #ACD8F0; }
+
+#filter{
+    margin:10px 0 0 50%;
+    width:50%;
+    }
+#from{
+    margin:0 auto;
+    margin-bottom:10px;
+    }
+#to{
+    margin:0 auto;
+    margin-bottom:10px;
+    }
   
 #chatbox {
     text-align:left;
@@ -27,13 +40,15 @@ form, p, span {
     overflow:auto; }
   
 #username {
+    margin:0 auto;
     width:100px;
     border:1px solid #ACD8F0; 
     margin-bottom:10px;}
     
 #msg {
-    width:200px;
-    border:1px solid #ACD8F0; }
+    width:430px;
+    border:1px solid #ACD8F0;
+    margin-bottom:10px;}
   
 #submit { width: 60px; }
   
