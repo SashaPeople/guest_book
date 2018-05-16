@@ -37,11 +37,12 @@ function create_tmessages(){
   if (!table_exist("messages")){
     $query ="CREATE TABLE public.messages
 (
-    id serial NOT NULL,
+    msg_id serial NOT NULL,
     text character varying(144) NOT NULL,
     user_id integer NOT NULL,
+    parent_id integer,
     date timestamp(10) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (msg_id)
 )
 WITH (
     OIDS = FALSE
@@ -66,18 +67,28 @@ function create_tusers(){
 WITH (
     OIDS = FALSE
 );
-
 ALTER TABLE public.users
     OWNER to postgres;";
   pg_query($query);
   }
 }
+
 function add_msg(){
   global $db;
   $user_id = get_user_id($_POST['username']);
-  $date = date('d-m-Y H:i:s');
+  $date = date('Y/m/d H:i:s');
   $msg = pg_escape_string($db, $_POST['msg']);
   $query = "INSERT INTO messages (text, user_id, date) VALUES('$msg','$user_id','$date')";
+  pg_query($db, $query);
+}
+
+function add_reply(){
+  global $db;
+  $user_id = get_user_id($_POST['username']);
+  $date = date('Y/m/d H:i:s');
+  $msg = pg_escape_string($db, $_POST['comment']);
+  $parent_id = $_POST['submit_reply']; 
+  $query = "INSERT INTO messages (text, user_id, parent_id, date) VALUES('$msg','$user_id','$parent_id','$date')";
   pg_query($db, $query);
 }
 
@@ -85,7 +96,7 @@ function add_user(){
   global $db;
   $name = pg_escape_string($db, $_POST['username']);
   if (user_exist($name) == false){
-    $date = date('d-m-Y H:i:s');
+    $date = date('Y/m/d H:i:s');
     $query = "INSERT INTO users (name, registration_date) VALUES('$name','$date')";
     pg_query($db, $query);
   }
@@ -102,18 +113,35 @@ function get_data(){
   if (table_exist($table_name1) == false){
     create_tusers();
   }
-  $query = "SELECT text, name, date FROM messages LEFT JOIN users ON (messages.user_id = users.id)";
+  $query = "SELECT text, name, msg_id, parent_id, date FROM messages LEFT JOIN users ON (messages.user_id = users.id)";
   $res = pg_query($db, $query);
-  return pg_fetch_all($res);
+  $result = array();
+    while ($row = pg_fetch_assoc($res)) {
+        $result[$row["msg_id"]] = $row;
+    }
+    return $result;
 }
 
 function print_data($messages){
-  if(!empty($messages)){
-    foreach($messages as $message){
-      include 'message.php';
+  foreach($messages as $message){
+    if (empty($message['parent_id'])){
+      tree($messages, $message['msg_id']);
     }
-  }
+  }    
 }
+
+function tree($messages, $parent_id){
+  echo "<ul>"; 
+  include'message.php';
+  foreach($messages as $message){
+    if ($message['parent_id'] == $parent_id)
+      tree($messages, $message['msg_id']);
+  } 
+  echo "</ul>"; 
+}
+
+
+
 function filtration(){
   global $db; 
   $from = $_POST['form']; 

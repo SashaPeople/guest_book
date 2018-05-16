@@ -7,6 +7,12 @@ if(!empty($_POST["submit"])){
   header("Location: {$_SERVER['PHP_SELF']}");
   exit;
 }
+if (!empty($_POST["submit_reply"])){
+  add_user();
+  add_reply(); 
+  header("Location: {$_SERVER['PHP_SELF']}");
+  exit;
+}
 if(empty($_POST["submit_filter"])){
   $messages = get_data();
 }else{
