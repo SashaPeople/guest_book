@@ -75,11 +75,14 @@ ALTER TABLE public.users
 
 function add_msg(){
   global $db;
-  $user_id = get_user_id($_POST['username']);
   $date = date('Y/m/d H:i:s');
+  $user_id = get_user_id($_POST['username']);
   $msg = pg_escape_string($db, $_POST['msg']);
-  $query = "INSERT INTO messages (text, user_id, date) VALUES('$msg','$user_id','$date')";
-  pg_query($db, $query);
+  if (!empty($user_id && $msg)){
+    $query = "INSERT INTO messages (text, user_id, date) VALUES('$1','$2','$3')";
+    $result = pg_prepare($db, "msg_query", $query);
+    $result = pg_execute($db, "msg_query", array($text, $user_id, $date));
+  }
 }
 
 function add_reply(){
@@ -88,8 +91,11 @@ function add_reply(){
   $date = date('Y/m/d H:i:s');
   $msg = pg_escape_string($db, $_POST['comment']);
   $parent_id = $_POST['submit_reply']; 
-  $query = "INSERT INTO messages (text, user_id, parent_id, date) VALUES('$msg','$user_id','$parent_id','$date')";
-  pg_query($db, $query);
+  if (!empty($user_id && $msg)){
+    $query = "INSERT INTO messages (text, user_id, parent_id, date) VALUES('$1','$2','$3','$4')";
+    $result = pg_prepare($db, "reply_query", $query);
+    $result = pg_execute($db, "reply_query", array($msg, $user_id, $parent_id, $date));
+  }
 }
 
 function add_user(){
@@ -97,8 +103,9 @@ function add_user(){
   $name = pg_escape_string($db, $_POST['username']);
   if (user_exist($name) == false){
     $date = date('Y/m/d H:i:s');
-    $query = "INSERT INTO users (name, registration_date) VALUES('$name','$date')";
-    pg_query($db, $query);
+    $query = "INSERT INTO users (name, registration_date) VALUES('$1','$2')";
+    $result = pg_prepare($db, "user_query", $query);
+    $result = pg_execute($db, "user_query", array($name, $date));
   }
 }
 

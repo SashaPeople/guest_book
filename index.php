@@ -50,8 +50,8 @@ if(empty($_POST["submit_filter"])){
     ?>
   </div>
     <form method="post" name="message" action="">
-      <input name="username" type="text" id="username" size="63" /></br>
-      <textarea name="msg" id="msg"></textarea></br>
+      <input name="username" type="text" id="username" required pattern= "^[a-zA-Z]+$" size="63" /></br>
+      <textarea name="msg" id="msg" required></textarea></br>
       <button type="submit" name="submit" value="test">submit</button>
     </form>
 </div>

@@ -5,8 +5,8 @@
   <details>
   <summary>reply</summary>
   <form method="post" name="reply" action="">
-    <input name="username" type="text" id="username" size="63" /></br>
-    <textarea name="comment" id="comment"></textarea></br>
+    <input name="username" type="text" id="username" required pattern= "^[a-zA-Z]+$" size="63" /></br>
+    <textarea name="comment" id="comment" required></textarea></br>
     <button type="submit" name="submit_reply" value="<?=$messages[$parent_id]['msg_id'] ?>">submit</button>
   </form>
   </details>
